@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
-
+// import Search from "./components/searchBar/Search";
+import {
+  Route,
+  Routes,
+  createSearchParams,
+  useNavigate,
+} from "react-router-dom";
+import Form from "./components/Form/Form";
+import { Navbar } from "./components/navbar/Navbar";
+import { Products } from "./pages/products";
+import { Cart } from "./pages/cart";
+import { Not } from "./pages/not-found";
+import { Product } from "./pages/product";
+import { CartContext } from "./context/context";
+import { useContext } from "react";
 function App() {
+  const useCart = useContext(CartContext);
+  const navigate = useNavigate();
+  const onSearch = (search) => {
+    navigate(`/?${createSearchParams({ q: search })}`);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      {/* <Search /> */}
+      <Navbar onSearch={onSearch} cartItem={useCart.cartItemCount()} />
+      <Routes>
+        <Route path="/" element={<Products />} />
+        <Route path="/product/:productId" element={<Product />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="*" element={<Not />} />
+      </Routes>
+    </>
   );
 }
 
